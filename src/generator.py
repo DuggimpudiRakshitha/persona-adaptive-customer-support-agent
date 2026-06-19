@@ -76,8 +76,8 @@ Answer ONLY using the provided context.
 Context:
 {context}
 """,
-                temperature=0.2,
-            ),
+                temperature=0.2
+            )
         )
 
         return response.text
@@ -86,10 +86,10 @@ Context:
 
         print("Generator Error:", e)
 
-        # Fallback response when Gemini quota is exhausted
+        # Fallback when Gemini quota is exceeded
         if chunks:
 
-            response = f"Based on the retrieved knowledge base:\n\n"
+            response = "Based on the retrieved knowledge base:\n\n"
 
             for chunk in chunks[:3]:
                 response += (
@@ -97,14 +97,8 @@ Context:
                     f"{chunk['text']}\n\n"
                 )
 
-            response += (
-                "\n(Note: AI generation is temporarily unavailable. "
-                "Showing retrieved knowledge base content instead.)"
-            )
+            response += "\n\nResponse generated from the knowledge base."
 
             return response
 
-        return (
-            "AI response generation is temporarily unavailable. "
-            "No relevant documents were found."
-        )
+        return "No relevant information found."
