@@ -61,7 +61,7 @@ Focus on business impact.
 """
 
         response = client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.5-flash",
             contents=query,
             config=types.GenerateContentConfig(
                 system_instruction=f"""
