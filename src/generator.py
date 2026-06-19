@@ -1,4 +1,5 @@
 import os
+import streamlit as st
 
 from dotenv import load_dotenv
 from google import genai
@@ -6,51 +7,64 @@ from google.genai import types
 
 load_dotenv()
 
+
+def get_api_key():
+
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        api_key = st.secrets.get("GEMINI_API_KEY")
+
+    return api_key
+
+
 def generate_response(
     query,
     persona,
     chunks
 ):
 
-    client = genai.Client(
-        api_key=os.getenv("GEMINI_API_KEY")
-    )
+    try:
 
-    context = "\n\n".join(
-        [
-            f"Source: {c['source']}\n{c['text']}"
-            for c in chunks
-        ]
-    )
+        client = genai.Client(
+            api_key=get_api_key()
+        )
 
-    if persona == "Technical Expert":
+        context = "\n\n".join(
+            [
+                f"Source: {c['source']}\n{c['text']}"
+                for c in chunks
+            ]
+        )
 
-        style = """
-Provide detailed technical explanations,
-root cause analysis,
-and troubleshooting steps.
+        if persona == "Technical Expert":
+
+            style = """
+Provide detailed technical explanations.
+Provide root cause analysis.
+Provide troubleshooting steps.
 """
 
-    elif persona == "Frustrated User":
+        elif persona == "Frustrated User":
 
-        style = """
+            style = """
 Be empathetic.
 Use simple language.
 Provide clear actions.
 """
 
-    else:
+        else:
 
-        style = """
+            style = """
 Be concise.
 Focus on business impact.
 """
 
-    response = client.models.generate_content(
-        model="models/gemini-2.5-flash",
-        contents=query,
-        config=types.GenerateContentConfig(
-            system_instruction=f"""
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=query,
+            config=types.GenerateContentConfig(
+                system_instruction=f"""
 {style}
 
 Use ONLY the provided context.
@@ -58,8 +72,14 @@ Use ONLY the provided context.
 Context:
 {context}
 """,
-            temperature=0.2
+                temperature=0.2
+            )
         )
-    )
 
-    return response.text
+        return response.text
+
+    except Exception as e:
+
+        print("Generator Error:", e)
+
+        return f"Unable to generate response. Error: {str(e)}"
