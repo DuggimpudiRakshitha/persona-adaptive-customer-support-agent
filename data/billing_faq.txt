@@ -1,0 +1,9 @@
+Billing FAQ
+
+When are invoices generated?
+
+Invoices are generated at the beginning of each billing cycle.
+
+Can I download invoices?
+
+Yes, from the billing section.

@@ -1,0 +1,10 @@
+Network Troubleshooting
+
+Check:
+
+- Internet connectivity
+- VPN settings
+- Firewall rules
+- DNS resolution
+
+Restart router if necessary.

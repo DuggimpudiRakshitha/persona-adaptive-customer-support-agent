@@ -1,0 +1,9 @@
+Account Recovery
+
+Users must verify account ownership.
+
+Recovery methods:
+
+- Email verification
+- Security questions
+- Support verification process

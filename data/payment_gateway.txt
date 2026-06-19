@@ -1,0 +1,10 @@
+Payment Gateway Issues
+
+Payments may fail because of:
+
+- Expired card
+- Bank rejection
+- Insufficient funds
+- Network timeout
+
+Retry payment after verifying card details.

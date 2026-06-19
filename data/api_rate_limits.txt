@@ -1,0 +1,9 @@
+API Rate Limits
+
+Standard Plan:
+100 requests per minute
+
+Premium Plan:
+1000 requests per minute
+
+Exceeding limits results in temporary throttling.

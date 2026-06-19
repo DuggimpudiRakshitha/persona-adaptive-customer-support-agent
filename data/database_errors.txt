@@ -1,0 +1,10 @@
+Database Errors
+
+Common causes:
+
+- Invalid credentials
+- Network connectivity issues
+- Database downtime
+- Expired access permissions
+
+Check logs for detailed diagnostics.

@@ -1,0 +1,11 @@
+Security Policy
+
+Never share passwords or API keys.
+
+Enable:
+
+- Two-factor authentication
+- Strong passwords
+- Device verification
+
+Report suspicious activity immediately.

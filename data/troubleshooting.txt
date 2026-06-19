@@ -1,0 +1,7 @@
+General Troubleshooting
+
+- Restart application
+- Clear browser cache
+- Log out and log in again
+- Verify internet connection
+- Update application version

@@ -1,0 +1,11 @@
+User Roles
+
+Admin:
+- Full access
+
+Manager:
+- Reporting access
+- Team management
+
+User:
+- Standard account access

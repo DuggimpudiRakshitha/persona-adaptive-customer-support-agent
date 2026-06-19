@@ -1,0 +1,9 @@
+Service Status
+
+Check the status dashboard for:
+
+- Outages
+- Scheduled maintenance
+- Performance incidents
+
+Major incidents are communicated by email.
