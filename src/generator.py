@@ -9,7 +9,6 @@ load_dotenv()
 
 
 def get_api_key():
-
     api_key = os.getenv("GEMINI_API_KEY")
 
     if not api_key:
@@ -18,23 +17,19 @@ def get_api_key():
     return api_key
 
 
-def generate_response(
-    query,
-    persona,
-    chunks
-):
+def generate_response(query, persona, chunks):
+
+    context = "\n\n".join(
+        [
+            f"Source: {chunk['source']}\n{chunk['text']}"
+            for chunk in chunks
+        ]
+    )
 
     try:
 
         client = genai.Client(
             api_key=get_api_key()
-        )
-
-        context = "\n\n".join(
-            [
-                f"Source: {c['source']}\n{c['text']}"
-                for c in chunks
-            ]
         )
 
         if persona == "Technical Expert":
@@ -43,14 +38,16 @@ def generate_response(
 Provide detailed technical explanations.
 Provide root cause analysis.
 Provide troubleshooting steps.
+Use bullet points.
 """
 
         elif persona == "Frustrated User":
 
             style = """
 Be empathetic.
+Acknowledge the frustration.
 Use simple language.
-Provide clear actions.
+Provide clear next steps.
 """
 
         else:
@@ -58,6 +55,7 @@ Provide clear actions.
             style = """
 Be concise.
 Focus on business impact.
+Focus on resolution timeline.
 """
 
         response = client.models.generate_content(
@@ -65,15 +63,21 @@ Focus on business impact.
             contents=query,
             config=types.GenerateContentConfig(
                 system_instruction=f"""
+You are a customer support assistant.
+
+Persona:
+{persona}
+
+Response Style:
 {style}
 
-Use ONLY the provided context.
+Answer ONLY using the provided context.
 
 Context:
 {context}
 """,
-                temperature=0.2
-            )
+                temperature=0.2,
+            ),
         )
 
         return response.text
@@ -82,4 +86,25 @@ Context:
 
         print("Generator Error:", e)
 
-        return f"Unable to generate response. Error: {str(e)}"
+        # Fallback response when Gemini quota is exhausted
+        if chunks:
+
+            response = f"Based on the retrieved knowledge base:\n\n"
+
+            for chunk in chunks[:3]:
+                response += (
+                    f"Source: {chunk['source']}\n"
+                    f"{chunk['text']}\n\n"
+                )
+
+            response += (
+                "\n(Note: AI generation is temporarily unavailable. "
+                "Showing retrieved knowledge base content instead.)"
+            )
+
+            return response
+
+        return (
+            "AI response generation is temporarily unavailable. "
+            "No relevant documents were found."
+        )
